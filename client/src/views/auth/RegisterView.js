@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const RegisterView = () => {
+const RegisterView = (props) => {
+  const [errorMessage, setErrorMessage] = useState('');
   const classes = useStyles();
   // const navigate = useNavigate();
 
@@ -36,15 +37,20 @@ const RegisterView = () => {
   };
 
   const newCustomer = async (entries) => {
-    const response = await fetch('/customer/new', {
+    const response = await fetch('/user/new', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(entries),
+      body: JSON.stringify({
+        ...entries,
+        role: 3
+      }),
     });
     const body = await response.text();
-    console.log({ body });
+    const result = JSON.parse(body);
+    console.log(result);
+    if (result.error) setErrorMessage(result.errorMessage);
   };
 
   let provinces = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon Territory"];
@@ -118,7 +124,6 @@ const RegisterView = () => {
               handleBlur,
               handleChange,
               handleSubmit,
-              isSubmitting,
               touched,
               values
             }) => (
@@ -269,6 +274,12 @@ const RegisterView = () => {
                 >
                   { amounts }
                 </TextField>
+                <Typography
+                    color="error"
+                    variant="body1"
+                  >
+                    { errorMessage }
+                </Typography>
                 <Box
                   alignItems="center"
                   display="flex"
@@ -304,7 +315,6 @@ const RegisterView = () => {
                 <Box my={2}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"
@@ -320,8 +330,7 @@ const RegisterView = () => {
                   Have an account?
                   {' '}
                   <Link
-                    component={RouterLink}
-                    to="/login"
+                    onClick={() => props.setLogin(true)}
                     variant="h6"
                   >
                     Sign in

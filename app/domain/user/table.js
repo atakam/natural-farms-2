@@ -1,7 +1,6 @@
 const connection = require('../../../databasePool');
-
-class CustomerTable {
-  static addCustomer(customer) {
+class UserTable {
+  static addUser(user) {
     const {
       firstName,
       lastName,
@@ -12,8 +11,9 @@ class CustomerTable {
       postalCode,
       province,
       phoneNumber,
-      weekAmount
-    } = customer;
+      weekAmount,
+      role
+    } = user;
 
     const entry = {
       firstName,
@@ -26,20 +26,18 @@ class CustomerTable {
       province,
       phoneNumber,
       weekAmount,
-      role: 3,
+      role,
       dateCreated: today()
     };
     return new Promise((resolve, reject) => {
-      connection.connect();
       connection.query('INSERT INTO users SET ?', entry, function (error, results, fields) {
         if (error) return reject(error);
         resolve({results, fields});
-        // resolve({ customerid: response.rows[0].id});
+        // resolve({ userid: response.rows[0].id});
         // Neat!
         console.log({results});
         console.log({fields});
       });
-      connection.end();
     });
   }
 }
@@ -54,4 +52,4 @@ function today() {
   return ntoday;
 }
 
-module.exports = CustomerTable;
+module.exports = UserTable;

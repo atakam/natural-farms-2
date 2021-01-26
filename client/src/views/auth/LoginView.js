@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from "react-redux";
+import { signin } from "../../actions/account";
+import fetchStates from "../../reducers/fetchStates";
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -14,6 +17,7 @@ import {
 import Page from 'src/components/Page';
 
 import PersonIcon from '@material-ui/icons/Person';
+import RegisterView from './RegisterView';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,15 +28,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LoginView = () => {
+const LoginView = (props) => {
   const classes = useStyles();
-  const navigate = useNavigate();
 
   const signUp = () => {
-    navigate('/register');
+    //navigate('/register');
+    setLogin(false);
   };
 
-  return (
+  const [isLogin, setLogin] = useState(true);
+
+  return isLogin ? (
     <Page
       className={classes.root}
       title="Login"
@@ -53,8 +59,10 @@ const LoginView = () => {
               email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={(values) => {
+              console.log(values);
+              props.signin(values);
+              //navigate('/app/dashboard', { replace: true });
             }}
           >
             {({
@@ -149,7 +157,10 @@ const LoginView = () => {
         </Container>
       </Box>
     </Page>
-  );
+  ) : <RegisterView setLogin={setLogin} />;
 };
 
-export default LoginView;
+export default connect(
+  ({ account }) => ({ account }), 
+  { signin }
+)(LoginView);

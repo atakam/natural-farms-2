@@ -5,6 +5,14 @@ const connection = mysql.createConnection({
   password : 'LvdXfmECPs%;',
   database : 'sihoneco_naturalfarms'
 });
+connection.connect(function(err) {
+  if (err) {
+    console.error('error connecting: ' + err.stack);
+    return;
+  }
+ 
+  console.log('connected as id ' + connection.threadId);
+});
 
 module.exports = connection;
 

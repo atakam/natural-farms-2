@@ -7,16 +7,21 @@ import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import routes from 'src/routes';
 import 'src/resources/style.css';
+import { connect } from "react-redux";
+import LoginView from "./views/auth/LoginView";
 
-const App = () => {
+const App = (props) => {
   const routing = useRoutes(routes);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      {routing}
+      {props.account.loggedIn ? routing : <LoginView />}
     </ThemeProvider>
   );
 };
 
-export default App;
+export default connect(
+  ({ account }) => ({ account }),
+  null
+)(App);
