@@ -10,6 +10,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/user/new', userRouter.newUser);
 app.post('/user/login', userRouter.login);
 app.post('/user/logout', userRouter.logout);
-app.post('/user/authenticated', userRouter.authenticated);
+app.get('/user/authenticated', userRouter.authenticated);
 
 module.exports = app;

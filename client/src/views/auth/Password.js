@@ -33,7 +33,8 @@ class Password extends Component {
             type={this.state.showPassword ? "text" : "password"}
             value={this.props.values.password}
             variant="outlined"
-            className="halfWidth"
+            className={this.props.fullWidth ? '' : "halfWidth"}
+            fullWidth={this.props.fullWidth}
             InputProps={{
             endAdornment:
                 <InputAdornment position="end">

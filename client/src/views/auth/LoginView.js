@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { signin } from "../../actions/account";
 import fetchStates from "../../reducers/fetchStates";
 import { useNavigate } from 'react-router-dom';
+import sha256 from 'crypto-js/sha256';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -18,6 +19,7 @@ import Page from 'src/components/Page';
 
 import PersonIcon from '@material-ui/icons/Person';
 import RegisterView from './RegisterView';
+import Password from './Password';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +30,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const hash = (string) => {
+  return sha256(string).toString();
+};
+
 const LoginView = (props) => {
+  const {
+    message
+  } = props.account;
+
   const classes = useStyles();
 
   const signUp = () => {
@@ -61,7 +71,10 @@ const LoginView = (props) => {
             })}
             onSubmit={(values) => {
               console.log(values);
-              props.signin(values);
+              props.signin({...values, password: hash(values.password)})
+              .then(response => {
+                console.log(response);
+              });
               //navigate('/app/dashboard', { replace: true });
             }}
           >
@@ -126,23 +139,23 @@ const LoginView = (props) => {
                   value={values.email}
                   variant="outlined"
                 />
-                <TextField
-                  error={Boolean(touched.password && errors.password)}
+                <Password
+                  touched={touched}
+                  errors={errors}
+                  values={values}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                   fullWidth
-                  helperText={touched.password && errors.password}
-                  label="Password"
-                  margin="normal"
-                  name="password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={values.password}
-                  variant="outlined"
                 />
+                <Typography
+                    color="error"
+                    variant="body1"
+                  >
+                    { message }
+                </Typography>
                 <Box my={2}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"

@@ -9,18 +9,21 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 
 import combineReducers from "./reducers";
+import { fetchAuthenticated } from "./actions/account";
 
 const store = createStore(
   combineReducers,
   applyMiddleware(thunk)
 );
 
-ReactDOM.render((
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
-), document.getElementById('root'));
-
-serviceWorker.unregister();
+store.dispatch(fetchAuthenticated())
+.then(() => {
+  ReactDOM.render((
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  ), document.getElementById('root'));
+  serviceWorker.unregister();
+});

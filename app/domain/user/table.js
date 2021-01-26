@@ -40,6 +40,15 @@ class UserTable {
       });
     });
   }
+
+  static getUserByEmail({email}) {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM users WHERE `email` = "'+email+'"', function (error, results, fields) {
+        if (error) return reject(error);
+        resolve({results});
+      });
+    });
+  }
 }
 
 function today() {

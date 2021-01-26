@@ -3,7 +3,7 @@ import { ACCOUNT } from './types';
 const fetchFromAccount = ({endpoint, options, SUCCESS_TYPE, errorMessage}) => dispatch => {
     dispatch({type: ACCOUNT.FETCH});
 
-    return fetch(`/member/${endpoint}`, options)
+    return fetch(`/user/${endpoint}`, options)
       .then(response => response.json())
       .then(json => {
           if (json.type === 'error') {
