@@ -3,7 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import sha256 from 'crypto-js/sha256';
-import axios from 'axios';
 import {
   Box,
   Button,
@@ -11,11 +10,13 @@ import {
   Container,
   FormHelperText,
   Link,
+  MenuItem,
   TextField,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
+import Password from './Password';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,21 @@ const RegisterView = () => {
     console.log({ body });
   };
 
+  let provinces = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon Territory"];
+  let amounts = ['0', '< 25$', '< 50$', '< 100$', '< 150$', '150$ +'];
+
+  provinces = 
+      provinces.map((option) => (
+        <MenuItem key={option} value={option}>
+          {option}
+        </MenuItem>
+      ));
+  amounts = 
+      amounts.map((option) => (
+        <MenuItem key={option} value={option}>
+          {option}
+        </MenuItem>
+      ));
   return (
     <Page
       className={classes.root}
@@ -67,7 +83,7 @@ const RegisterView = () => {
               streetAddress: '',
               city: '',
               postalCode: '',
-              province: '',
+              province: 'Quebec',
               phoneNumber: '',
               weekAmount: '',
               policy: false
@@ -162,18 +178,12 @@ const RegisterView = () => {
                   className="halfWidth"
                 />
                 <span style={{ padding: '10px' }} />
-                <TextField
-                  error={Boolean(touched.password && errors.password)}
-                  helperText={touched.password && errors.password}
-                  label="Password"
-                  margin="normal"
-                  name="password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={values.password}
-                  variant="outlined"
-                  className="halfWidth"
+                <Password
+                  touched={touched}
+                  errors={errors}
+                  values={values}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                 />
 
                 <TextField
@@ -226,7 +236,10 @@ const RegisterView = () => {
                   value={values.province}
                   variant="outlined"
                   className="halfWidth"
-                />
+                  select
+                >
+                  { provinces }
+                </TextField>
 
                 <TextField
                   error={Boolean(touched.phoneNumber && errors.phoneNumber)}
@@ -252,7 +265,10 @@ const RegisterView = () => {
                   value={values.weekAmount}
                   variant="outlined"
                   className="halfWidth"
-                />
+                  select
+                >
+                  { amounts }
+                </TextField>
                 <Box
                   alignItems="center"
                   display="flex"
