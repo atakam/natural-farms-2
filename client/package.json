@@ -51,7 +51,7 @@
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.0",
-    "type-fest": "^0.8.1",
+    "type-fest": "^0.20.2",
     "uuid": "^8.3.0",
     "yup": "^0.29.3"
   },
