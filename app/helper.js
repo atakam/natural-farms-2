@@ -38,15 +38,18 @@ const setSessionCookie = ({ sessionString, res }) => {
 };
 
 const authenticatedUser = ({ sessionString }) => {
+  sessionString = decodeURIComponent(sessionString);
+  console.log(sessionString);
+  const { email, id, sessionHash } = Session.parse(sessionString);
   return new Promise((resolve, reject) => {
-    if (!sessionString || !Session.verify(sessionString)) {
+    if (!sessionString || !Session.verify({ email, id, sessionHash })) {
       const error = new Error('Invalid session');
-  
       error.statusCode = 400;
   
       resolve({ user: null, authenticated: false, email: null });
     } else {
-      const { email, id } = Session.parse(sessionString);
+      console.log(33333);
+      console.log({ email, id });
   
       UserTable.getUserByEmail({ email })
         .then(({results}) => {

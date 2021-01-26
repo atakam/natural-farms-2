@@ -1,5 +1,6 @@
 const UserTable = require('../domain/user/table');
 const { setSession, authenticatedUser } = require('../helper');
+const Session = require('../domain/user/session');
 const router = {};
 
 router.login = (req, res, next) => {
@@ -27,9 +28,9 @@ router.login = (req, res, next) => {
 }
 
 router.logout = (req, res, next) => {
-    const { email } = Session.parse(req.cookies.sessionString);
+    const { email } = Session.parse(req.headers.cookie.split("=")[1]);
 
-    MemberTable.updateSessionId({
+    UserTable.updateSessionId({
         sessionId: null,
         email
     }).then(() => {
@@ -40,11 +41,10 @@ router.logout = (req, res, next) => {
 }
 
 router.authenticated = (req, res, next) => {
-    console.log({req});
-    authenticatedUser({ sessionString: req.cookies.sessionString })
+    authenticatedUser({ sessionString: req.headers.cookie.split("=")[1] })
         .then(({ authenticated, user }) => {
-        authenticated ? res.json({ authenticated, role: user.role, memberid: member.id, firstname: member.firstName }) :
-        res.json({authenticated: false});
+            authenticated ? res.json({ authenticated, role: user.role, memberid: user.id, firstname: user.firstName }) :
+            res.json({authenticated: false});
         })
         .catch(error => next(error));
 }

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { connect } from "react-redux";
+import { logout } from "../../actions/account";
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -27,6 +29,7 @@ const useStyles = makeStyles(() => ({
 const TopBar = ({
   className,
   onMobileNavOpen,
+  logout,
   ...rest
 }) => {
   const classes = useStyles();
@@ -53,7 +56,10 @@ const TopBar = ({
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton
+            color="inherit"
+            onClick={() => {logout()}}
+          >
             <InputIcon />
           </IconButton>
         </Hidden>
@@ -75,4 +81,7 @@ TopBar.propTypes = {
   onMobileNavOpen: PropTypes.func
 };
 
-export default TopBar;
+export default connect(
+  ({ account }) => ({ account }), 
+  { logout }
+)(TopBar);

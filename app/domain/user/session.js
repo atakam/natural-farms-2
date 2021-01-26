@@ -25,10 +25,9 @@ class Session {
     };
   }
 
-  static verify(sessionString) {
-    const { email, id, sessionHash } = Session.parse(sessionString);
-
+  static verify({ email, id, sessionHash }) {
     const accountData = Session.accountData({ email, id });
+    console.log({email, id, sessionHash, accountData,  h: hash(accountData)});
 
     return hash(accountData) === sessionHash;
   }

@@ -49,6 +49,15 @@ class UserTable {
       });
     });
   }
+
+  static updateSessionId({sessionid, email}) {
+    return new Promise((resolve, reject) => {
+      connection.query('UPDATE users SET ?  WHERE `email` = "'+email+'"', {sessionid}, function (error, results, fields) {
+        if (error) return reject(error);
+        resolve({results});
+      });
+    });
+  }
 }
 
 function today() {

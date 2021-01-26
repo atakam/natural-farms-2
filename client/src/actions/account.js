@@ -1,6 +1,6 @@
 import { ACCOUNT } from './types';
 
-const fetchFromAccount = ({endpoint, options, SUCCESS_TYPE, errorMessage}) => dispatch => {
+const fetchFromAccount = ({endpoint, credentials, options, SUCCESS_TYPE, errorMessage}) => dispatch => {
     dispatch({type: ACCOUNT.FETCH});
 
     return fetch(`/user/${endpoint}`, options)
@@ -15,7 +15,8 @@ const fetchFromAccount = ({endpoint, options, SUCCESS_TYPE, errorMessage}) => di
           else {
               dispatch({
                   type: SUCCESS_TYPE,
-                  ...json
+                  ...json,
+                  credentials
               });
           }
       })
@@ -37,6 +38,7 @@ const fetchFromAccount = ({endpoint, options, SUCCESS_TYPE, errorMessage}) => di
 
 export const signin = ({email, password}) => fetchFromAccount({
     endpoint: 'login',
+    credentials: {email, password},
     options: {
         method: 'POST',
         body: JSON.stringify({email, password}),
