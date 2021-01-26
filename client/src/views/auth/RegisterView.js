@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import sha256 from 'crypto-js/sha256';
+import axios from 'axios';
 import {
   Box,
   Button,
@@ -26,7 +28,21 @@ const useStyles = makeStyles((theme) => ({
 
 const RegisterView = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  const hash = (string) => {
+    return sha256(string).toString();
+  };
+
+  const newCustomer = (entries) => {
+    axios({
+      method: 'post',
+      url: '/customer/new',
+      data: entries
+    }).then((response) => {
+      console.log(response);
+    });
+  };
 
   return (
     <Page
@@ -46,6 +62,12 @@ const RegisterView = () => {
               firstName: '',
               lastName: '',
               password: '',
+              streetAddress: '',
+              city: '',
+              postalCode: '',
+              province: '',
+              phoneNumber: '',
+              weekAmount: '',
               policy: false
             }}
             validationSchema={
@@ -53,12 +75,24 @@ const RegisterView = () => {
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                 firstName: Yup.string().max(255).required('First name is required'),
                 lastName: Yup.string().max(255).required('Last name is required'),
-                password: Yup.string().max(255).required('password is required'),
+                password: Yup.string().max(255).required('Password is required'),
+                streetAddress: Yup.string().max(255).required('Street address is required'),
+                city: Yup.string().max(255).required('City is required'),
+                postalCode: Yup.string().max(255).required('Postal Code is required'),
+                province: Yup.string().max(255).required('Proovince is required'),
+                phoneNumber: Yup.string().max(255).required('Phone number is required'),
+                weekAmount: Yup.string().max(255).required('Amount per week is required'),
                 policy: Yup.boolean().oneOf([true], 'This field must be checked')
               })
             }
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={(values) => {
+              const entries = {
+                ...values,
+                password: hash(values.password)
+              };
+              console.log(entries);
+              newCustomer(entries);
+              // navigate('/app/dashboard', { replace: true });
             }}
           >
             {({
@@ -88,7 +122,6 @@ const RegisterView = () => {
                 </Box>
                 <TextField
                   error={Boolean(touched.firstName && errors.firstName)}
-                  fullWidth
                   helperText={touched.firstName && errors.firstName}
                   label="First name"
                   margin="normal"
@@ -97,10 +130,11 @@ const RegisterView = () => {
                   onChange={handleChange}
                   value={values.firstName}
                   variant="outlined"
+                  className="halfWidth"
                 />
+                <span style={{ padding: '10px' }} />
                 <TextField
                   error={Boolean(touched.lastName && errors.lastName)}
-                  fullWidth
                   helperText={touched.lastName && errors.lastName}
                   label="Last name"
                   margin="normal"
@@ -109,10 +143,11 @@ const RegisterView = () => {
                   onChange={handleChange}
                   value={values.lastName}
                   variant="outlined"
+                  className="halfWidth"
                 />
+
                 <TextField
                   error={Boolean(touched.email && errors.email)}
-                  fullWidth
                   helperText={touched.email && errors.email}
                   label="Email Address"
                   margin="normal"
@@ -122,10 +157,11 @@ const RegisterView = () => {
                   type="email"
                   value={values.email}
                   variant="outlined"
+                  className="halfWidth"
                 />
+                <span style={{ padding: '10px' }} />
                 <TextField
                   error={Boolean(touched.password && errors.password)}
-                  fullWidth
                   helperText={touched.password && errors.password}
                   label="Password"
                   margin="normal"
@@ -135,6 +171,85 @@ const RegisterView = () => {
                   type="password"
                   value={values.password}
                   variant="outlined"
+                  className="halfWidth"
+                />
+
+                <TextField
+                  error={Boolean(touched.streetAddress && errors.streetAddress)}
+                  helperText={touched.streetAddress && errors.streetAddress}
+                  label="Street Address"
+                  margin="normal"
+                  name="streetAddress"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.streetAddress}
+                  variant="outlined"
+                  className="halfWidth"
+                />
+                <span style={{ padding: '10px' }} />
+                <TextField
+                  error={Boolean(touched.city && errors.city)}
+                  helperText={touched.city && errors.city}
+                  label="City"
+                  margin="normal"
+                  name="city"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.city}
+                  variant="outlined"
+                  className="halfWidth"
+                />
+
+                <TextField
+                  error={Boolean(touched.postalCode && errors.postalCode)}
+                  helperText={touched.postalCode && errors.postalCode}
+                  label="Postal Code"
+                  margin="normal"
+                  name="postalCode"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.postalCode}
+                  variant="outlined"
+                  className="halfWidth"
+                />
+                <span style={{ padding: '10px' }} />
+                <TextField
+                  error={Boolean(touched.province && errors.province)}
+                  helperText={touched.province && errors.province}
+                  label="Province"
+                  margin="normal"
+                  name="province"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.province}
+                  variant="outlined"
+                  className="halfWidth"
+                />
+
+                <TextField
+                  error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+                  helperText={touched.phoneNumber && errors.phoneNumber}
+                  label="Phone Number"
+                  margin="normal"
+                  name="phoneNumber"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.phoneNumber}
+                  variant="outlined"
+                  className="halfWidth"
+                />
+                <span style={{ padding: '10px' }} />
+                <TextField
+                  error={Boolean(touched.weekAmount && errors.weekAmount)}
+                  helperText={touched.weekAmount && errors.weekAmount}
+                  label="Amount spent on meat per week"
+                  margin="normal"
+                  name="weekAmount"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.weekAmount}
+                  variant="outlined"
+                  className="halfWidth"
                 />
                 <Box
                   alignItems="center"
