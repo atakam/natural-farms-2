@@ -3,35 +3,35 @@ const connection = require('../../../databasePool');
 class CustomerTable {
   static addCustomer(customer) {
     const {
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       password,
-      streetaddress,
+      streetAddress,
       city,
-      postal,
+      postalCode,
       province,
-      phone,
-      amount
+      phoneNumber,
+      weekAmount
     } = customer;
 
     const entry = {
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       password,
-      streetaddress,
+      streetAddress,
       city,
-      postal,
+      postalCode,
       province,
-      phone,
-      amount,
+      phoneNumber,
+      weekAmount,
       role: 3,
       dateCreated: today()
     };
     return new Promise((resolve, reject) => {
       connection.connect();
-      connection.query('INSERT INTO posts SET ?', entry, function (error, results, fields) {
+      connection.query('INSERT INTO users SET ?', entry, function (error, results, fields) {
         if (error) return reject(error);
         resolve({results, fields});
         // resolve({ customerid: response.rows[0].id});

@@ -34,14 +34,16 @@ const RegisterView = () => {
     return sha256(string).toString();
   };
 
-  const newCustomer = (entries) => {
-    axios({
-      method: 'post',
-      url: '/customer/new',
-      data: entries
-    }).then((response) => {
-      console.log(response);
+  const newCustomer = async (entries) => {
+    const response = await fetch('/customer/new', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(entries),
     });
+    const body = await response.text();
+    console.log({ body });
   };
 
   return (

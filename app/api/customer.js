@@ -1,34 +1,33 @@
-const { Router } = require('express');
 const CustomerTable = require('../domain/customer/table');
+const router = {};
 
-const router = new Router();
-
-router.post('/new', (req, res, next) => {
+router.newCustomer = (req, res, next) => {
     const {
-        firstname,
-        lastname,
+        firstName,
+        lastName,
         email,
         password,
-        streetaddress,
+        streetAddress,
         city,
-        postal,
+        postalCode,
         province,
-        phone,
-        amount
+        phoneNumber,
+        weekAmount
      } = req.body;
 
     const customer = {
-        firstname,
-        lastname,
+        firstName,
+        lastName,
         email,
         password,
-        streetaddress,
+        streetAddress,
         city,
-        postal,
+        postalCode,
         province,
-        phone,
-        amount
+        phoneNumber,
+        weekAmount
     };
+    console.log({customer});
 
     CustomerTable.addCustomer(customer)
     .then(({ customerid }) => {
@@ -40,7 +39,6 @@ router.post('/new', (req, res, next) => {
         });
     })
     .catch(error => next(error));
-    
-});
+}
 
 module.exports = router;
