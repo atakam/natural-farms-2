@@ -1,6 +1,6 @@
 {
-  "name": "react-material-dashboard",
-  "author": "DeviasIO",
+  "name": "natural-farms-2",
+  "author": "Austin Takam",
   "licence": "MIT",
   "version": "1.0.0",
   "private": false,
@@ -51,6 +51,7 @@
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.0",
+    "type-fest": "^0.8.1",
     "uuid": "^8.3.0",
     "yup": "^0.29.3"
   },
