@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { connect } from "react-redux";
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -55,21 +56,6 @@ const items = [
     href: '/app/settings',
     icon: SettingsIcon,
     title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
   }
 ];
 
@@ -89,7 +75,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const NavBar = ({ onMobileClose, openMobile }) => {
+const NavBar = ({ onMobileClose, openMobile, account }) => {
   const classes = useStyles();
   const location = useLocation();
 
@@ -111,24 +97,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         flexDirection="column"
         p={2}
       >
-        <Avatar
-          className={classes.avatar}
-          component={RouterLink}
-          src={user.avatar}
-          to="/app/account"
-        />
         <Typography
           className={classes.name}
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
-          {user.jobTitle}
+          {account.firstname + ' ' + account.lastname}
         </Typography>
       </Box>
       <Divider />
@@ -218,4 +192,7 @@ NavBar.defaultProps = {
   openMobile: false
 };
 
-export default NavBar;
+export default connect(
+  ({ account }) => ({ account }), 
+  null
+)(NavBar);

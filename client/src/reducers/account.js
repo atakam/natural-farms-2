@@ -41,7 +41,8 @@ const account = (state = DEFAULT_ACCOUNT, action) => {
                 loggedIn: action.authenticated,
                 role: action.role,
                 memberid: action.memberid,
-                firstname: action.firstname
+                firstname: action.firstname,
+                lastname: action.lastname
             }
         default:
             return state;

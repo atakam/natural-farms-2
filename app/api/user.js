@@ -43,7 +43,7 @@ router.logout = (req, res, next) => {
 router.authenticated = (req, res, next) => {
     authenticatedUser({ sessionString: req.headers.cookie.split("=")[1] })
         .then(({ authenticated, user }) => {
-            authenticated ? res.json({ authenticated, role: user.role, memberid: user.id, firstname: user.firstName }) :
+            authenticated ? res.json({ authenticated, role: user.role, memberid: user.id, firstname: user.firstName, lastname: user.lastName }) :
             res.json({authenticated: false});
         })
         .catch(error => next(error));
